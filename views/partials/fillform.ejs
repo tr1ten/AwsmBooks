@@ -1,0 +1,27 @@
+<form action="<%= EDIT ? `/shop/${item._id}?_method=PUT` : "/shop" %>"  method="post">
+<div class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon1">Title</span>
+  <input value="<%=  !EDIT ? "" : item.title %> " type="text" class="form-control" placeholder="title" aria-label="Username" aria-describedby="basic-addon1" name='title'>
+</div>
+
+
+
+<div class="input-group mb-3">
+  <span class="input-group-text">$</span>
+  <input value="<%=  !EDIT ? "" : item.price %> " type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name='price'>
+  <span class="input-group-text">.00</span>
+</div>
+
+
+<div class="input-group">
+  <span class="input-group-text">Description</span>
+  <textarea class="form-control" aria-label="With textarea" name='description'><%=  !EDIT ? "" : item.description %></textarea>
+</div>
+<div class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon1">imageurl</span>
+  <input type="text" class="form-control" placeholder="imgur.com/" aria-label="Username" aria-describedby="basic-addon1" name='imageurl' value="<%= !EDIT ? "" : item.imageurl %> ">
+</div>
+
+
+<button type="submit" class="btn btn-success">Submit</button>
+</form>

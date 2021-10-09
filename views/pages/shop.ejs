@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head') %>
+
+<body>
+    <main class="content">
+        <nav class="navbar">
+
+            <h2>AwsmBooks</h2>
+
+
+        </nav>
+        <div class="container align-items-lg-start">
+            <% for( let item of items ) { %>
+                <% console.log(item) %>
+                    <%- include('../partials/itemcard',{item}) %>
+                        <% } %>
+                            <form action="/shop/add" method="get">
+                                <button type="submit" class="btn btn-info">Add Book</button>
+                            </form </div>
+
+
+    </main>
+
+
+
+</body>
+
+</html>

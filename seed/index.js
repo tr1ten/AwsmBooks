@@ -1,6 +1,12 @@
 const Item = require('../models/item')
+const Review = require('../models/review')
+
 const mongoose = require('mongoose')
-const cleanUp = async () => await Item.deleteMany({});
+
+const cleanUp = async () => { 
+    await Item.deleteMany({}) 
+    await Review.deleteMany({})
+};
 
 
 const arr = [
@@ -9,8 +15,7 @@ const arr = [
         imageurl: 'https://images-na.ssl-images-amazon.com/images/I/71wVt05P30L.jpg',
         tag: "Linear Aljebra",
         price: 69,
-        rating: 10,
-        description:'Hello world book',
+        description: 'Hello world book',
 
     },
     {
@@ -18,9 +23,7 @@ const arr = [
         imageurl: 'https://images-na.ssl-images-amazon.com/images/I/71wVt05P30L.jpg',
         tag: 'Linear Aljebra',
         price: 70,
-        rating: 10,
-
-        description:'Hello world book',
+        description: 'Hello world book',
 
     }
 
@@ -28,7 +31,7 @@ const arr = [
 
 mongoose.connect('mongodb://localhost:27017/BooksStore').then(async () => {
     console.log('Succesfully connected to Db!')
-    cleanUp()
+    await cleanUp()
 
 
     Item.insertMany(arr, function (error, docs) {
@@ -43,6 +46,6 @@ mongoose.connect('mongodb://localhost:27017/BooksStore').then(async () => {
     });
 
 
-}).catch(() => {
-    console.log('error occured!')
+}).catch((e) => {
+    console.log('error occured!', e)
 })

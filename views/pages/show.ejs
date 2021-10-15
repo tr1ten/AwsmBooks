@@ -1,0 +1,51 @@
+<% layout('./helpers/boilerplate') -%>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <img src="<%= item.imageurl %> " alt="imamge" width="70%">
+
+            </div>
+            <div class="col">
+                <h2>
+                    <%= item.title %>
+                </h2>
+                <p>
+                    <%= item.description %>
+                </p>
+                <p>Total $ <%= item.price%>
+                </p>
+                <button type="button" class="btn btn-success">Buy</button>
+                <%- include('../partials/review',{id:item.id}) %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h3>User Reviews</h3>
+                <div class="list-group">
+                    <% for( let review of reviews) { %>
+                        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">
+                                    <%= review.userId %>
+                                </h5>
+                                <small class="text-muted">
+                                    <%= review.ratings %>
+                                </small>
+                            </div>
+                            <p class="mb-1">
+                                <%= review.comment %>
+                                <form action="/shop/<%= item.id %>/reviews/<%= review.id %>?_method=DELETE" method="post">
+                                  <button type="submit" class="btn btn-danger">remove</button>
+                                </form>
+                            </p>
+                            <small class="text-muted"><%= review.createdAt.toDateString() %></small>
+
+                           
+                        </a>
+
+                        <% } %>
+
+                </div>
+            </div>
+        </div>
+    </div>

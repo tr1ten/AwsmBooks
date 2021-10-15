@@ -1,75 +1,71 @@
 const express = require('express')
-const path = require('path')
-const Item = require('./models/item')
-const mongoose = require('mongoose')
-const methodOverride = require('method-override')
- 
+const path = require('path');
+const mongoose = require('mongoose');
+const methodOverride = require('method-override');
+const HttpError = require('./utils/HttpError')
+const shoproute = require('./routes/shop');
+const userroute = require('./routes/auth');
+const session = require('express-session');
+const flash = require('connect-flash');
+const  LocalStrategy = require('passport-local').Strategy;
+const User = require('./models/user');
+const passport = require('passport')
+engine = require('ejs-mate')
 
 
+//Mongoose db connection
 mongoose.connect('mongodb://localhost:27017/BooksStore').then(() => {
     console.log('Succesfully connected to Db!')
-}).catch(() => {
-    console.log('error occured!')
+}).catch((e) => {
+    console.log('error occured!', e)
 })
 // Setting up express server
 const app = express()
 // override with the _method in the query
 app.use(methodOverride('_method'))
 const port = 3000
-
-
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { 
+        maxAge:1000*24*60*60*7
+     }
+}))
 app.set('views', path.join(__dirname, '/views'))
+app.engine('ejs', engine);
 app.set('view engine', 'ejs')
+app.use(flash());
+//passport setup 
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+// adding middleware to inject flash message to views  locals
+app.use((req,res,next)=>{
+    res.locals.user = req.user;
+    res.locals.message = req.flash('info');
+    res.locals.error = req.flash('error');
+    next()
+})
+
 
 // Routing  -->
-// Get request
-app.get('/shop/add', (req, res) => {
-    res.render('pages/additem');
-})
-app.get('/shop/edit/:id', async (req, res) => {
-    const {id} = req.params
-    item =await Item.findById(id);
-    res.render('pages/edit',item);
-})
-app
-app.get('/shop', async (req, res) => {
-    const items = await Item.find({})
-    res.render('pages/shop', { items })
+app.use('/shop', shoproute)
+app.use('/', userroute)
 
-})
 app.get('/', (req, res) => {
     res.render('index')
 })
-// Post request 
 
-app.use(express.urlencoded({extended:true}))
-app.post('/shop', function (req, res) {
-    console.log('post req ->',req.body)
-    const item = new Item({...req.body})
-    item.save((err,docs)=>{
-        console.log('item added')
-    })
+app.all('*', (req, res) => {
+    throw new HttpError('Page not found', 404)
+})
+app.use((err, req, res, next) => {
+    res.render('./pages/error.ejs', { err })
 
-    res.redirect('/shop')
 })
-// Misc Http 
 
-app.put('/shop/:id',(req,res)=>{
-    
-    const {id} = req.params;
-    console.log('put req ->',req.body,id)
-    Item.findByIdAndUpdate(id,{...req.body},()=>{
-        res.redirect('/shop')
-    })
-    
-})
-app.delete('/shop/:id',(req,res)=>{
-    
-    const {id} = req.params;
-    console.log('delete req ->',req.body,id)
-    Item.findByIdAndRemove(id,{...req.body},()=>{
-        res.redirect('/shop')
-    })
-    
-})
 app.listen(port, () => console.log(`Example app listening on port ${port}`))

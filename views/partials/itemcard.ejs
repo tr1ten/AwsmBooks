@@ -1,14 +1,21 @@
 <div class="card" style="width: 18rem;">
-    <img src="<%= item.imageurl %> " class="card-img-top" alt="image">
-    <div class="card-body">
-      <h5 class="card-title"><%=item.title %> </h5>
-      <p class="card-text"><%= item.description %> </p>
+  <img src="<%= item.imageurl %> " class="card-img-top" alt="image">
+  <div class="card-body">
+    <h5 class="card-title">
+      <%=item.title %>
+    </h5>
+    <p class="card-text">
+      <%= item.description %>
+    </p>
+    <div class=" d-flex flex-row bg-white justify-content-around">
+
       <a href="/shop/edit/<%= item._id%> " class="btn btn-primary">Edit</a>
       <form action="<%= `shop/${item._id}` %>?_method=DELETE " method="post">
         <button type="submit" class="btn btn-danger">Remove</button>
       </form>
-      <a href="#" class="btn btn-primary">Add to Cart</a>
-      
-      
+      <a href="/shop/<%= item._id%> " class="btn btn-primary">View</a>
     </div>
+
+
   </div>
+</div>

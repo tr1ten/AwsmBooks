@@ -15,7 +15,10 @@
                 <p>Total $ <%= item.price%>
                 </p>
                 <button type="button" class="btn btn-success">Buy</button>
-                <%- include('../partials/review',{id:item.id}) %>
+                <% if (user) { %>
+                    <%- include('../partials/review',{id:item.id}) %>
+                <% } %>
+                
             </div>
         </div>
         <div class="row">
@@ -26,7 +29,7 @@
                         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1">
-                                    <%= review.userId %>
+                                    <%= review.by.username %>
                                 </h5>
                                 <small class="text-muted">
                                     <%= review.ratings %>
@@ -34,9 +37,12 @@
                             </div>
                             <p class="mb-1">
                                 <%= review.comment %>
-                                <form action="/shop/<%= item.id %>/reviews/<%= review.id %>?_method=DELETE" method="post">
-                                  <button type="submit" class="btn btn-danger">remove</button>
-                                </form>
+                                <% if (user && user.id == review.by._id) { %>
+                                    <form action="/shop/<%= item.id %>/reviews/<%= review.id %>?_method=DELETE" method="post">
+                                        <button type="submit" class="btn btn-danger">remove</button>
+                                      </form>
+                                 
+                                <% } %>
                             </p>
                             <small class="text-muted"><%= review.createdAt.toDateString() %></small>
 

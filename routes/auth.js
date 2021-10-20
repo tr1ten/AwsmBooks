@@ -11,9 +11,14 @@ router.get('/register', (req, res) => {
 
 router.use(express.urlencoded({ extended: true }))
 router.post('/login', passport.authenticate('local',{failureFlash:true}), (req, res) => {
-  console.log('loggeed in')
   req.flash('info','succesfully logged in')
+  
+  if(req.session.returnTo){
+    res.redirect(req.session.returnTo)
+  }
+  else{
   res.redirect('/');
+  }
 })
 router.post('/logout', (req, res) => {
   delete res.locals.user;
@@ -22,7 +27,7 @@ router.post('/logout', (req, res) => {
   res.redirect('/')
 })
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res,next) => {
   try {
     
     console.log('got register req',req.body)

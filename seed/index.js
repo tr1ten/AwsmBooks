@@ -15,6 +15,7 @@ const arr = [
         imageurl: 'https://images-na.ssl-images-amazon.com/images/I/71wVt05P30L.jpg',
         tag: "Linear Aljebra",
         price: 69,
+        author:'616964617dbfc842e2f13b74',
         description: 'Hello world book',
 
     },
@@ -23,6 +24,7 @@ const arr = [
         imageurl: 'https://images-na.ssl-images-amazon.com/images/I/71wVt05P30L.jpg',
         tag: 'Linear Aljebra',
         price: 70,
+        author:'616964617dbfc842e2f13b74',
         description: 'Hello world book',
 
     }

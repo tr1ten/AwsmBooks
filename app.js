@@ -12,7 +12,6 @@ const User = require('./models/user');
 const passport = require('passport')
 engine = require('ejs-mate')
 
-
 //Mongoose db connection
 mongoose.connect('mongodb://localhost:27017/BooksStore').then(() => {
     console.log('Succesfully connected to Db!')

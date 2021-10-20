@@ -18,14 +18,14 @@
                         <a class="nav-link" href="/shop/add">Add Book</a>
                         <a class="nav-link" href="/shop">Pricing</a>
                         <div class="row m-auto">
-                            <% console.log('in temp user',user) %> 
-                            <% if (typeof user == 'undefined') { %>
+
+                            <% if (typeof user=='undefined' ) { %>
                                 <a class="nav-link col" href="/login">Login</a>
                                 <a class="nav-link col" href="/register">Register</a>
                                 <% } else{ %>
-                                    
+
                                     <form action="/logout" method="post">
-                                      <button type="submit" class="btn btn-success ">Logout</button>
+                                        <button type="submit" class="btn btn-success ">Logout</button>
                                     </form>
                                     <% } %>
                         </div>

@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
+const User = require('./user')
 const Schema = mongoose.Schema;
 const ReviewSchema = new Schema({
-    userId: String,
+    by:{
+        type:Schema.Types.ObjectId,
+        ref:User,
+    },
     ratings: {
         type:Number,
         required:true,

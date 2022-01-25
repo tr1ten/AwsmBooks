@@ -77,7 +77,7 @@ io.on('connection', async function (socket) {
 
 // override with the _method in the query
 app.use(methodOverride('_method'))
-const port = 3000
+const port = process.env.PORT || 3000;
 const expressSession = session({
     secret: 'keyboard cat',
     resave: false,

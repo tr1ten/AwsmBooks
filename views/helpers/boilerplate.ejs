@@ -1,6 +1,68 @@
 <!DOCTYPE html>
 <html>
 <%- include('../partials/head') %>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var userId = "<%=user?._id.toString()%>";
+        (function () {
+            function setCookie(name, value, days) {
+                if (!value) {
+                    return;
+                }
+                var expires = "";
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "") + expires + "; path=/";
+            }
+            if (!userId) {
+                return;
+            }
+            setCookie('uid', userId, 7);
+            console.log('Setting uid');
+            var onMessage = function (data) {
+                let ulEl = document.getElementById('nots');
+                console.log("got new message from socket:", data)
+                if (ulEl) {
+
+                    let divC = document.createElement('a');
+                    divC.classList.add("list-group-item", "list-group-item-action")
+                    divC.innerText = `${data}`;
+                    ulEl.appendChild(divC);
+                }
+            };
+
+            var connectToServer = function () {
+                var socket = io.connect('http://localhost:3000', { auth: { token: userId } });
+                socket.on(userId, onMessage);
+            };
+
+            connectToServer();
+
+        })();
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
 
     <body>
 
@@ -16,19 +78,24 @@
                     <div class="navbar-nav">
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                         <a class="nav-link" href="/shop/add">Add Book</a>
-                        <a class="nav-link" href="/shop">Pricing</a>
-                        <div class="row m-auto">
+                        <a class="nav-link" href="/shop">Shop</a>
 
-                            <% if (typeof user=='undefined' ) { %>
-                                <a class="nav-link col" href="/login">Login</a>
-                                <a class="nav-link col" href="/register">Register</a>
-                                <% } else{ %>
+                        <% if (user) { %>
 
-                                    <form action="/logout" method="post">
-                                        <button type="submit" class="btn btn-success ">Logout</button>
-                                    </form>
-                                    <% } %>
-                        </div>
+                            <a class="nav-link" href="/notifications">Notifications</a>
+                            <% } %>
+                                <div class="row m-auto">
+
+                                    <% if (typeof user=='undefined' ) { %>
+                                        <a class="nav-link col" href="/login">Login</a>
+                                        <a class="nav-link col" href="/register">Register</a>
+                                        <% } else{ %>
+
+                                            <form action="/logout" method="post">
+                                                <button type="submit" class="btn btn-success ">Logout</button>
+                                            </form>
+                                            <% } %>
+                                </div>
 
 
 
@@ -36,6 +103,7 @@
                 </div>
             </div>
         </nav>
+
         <section>
             <% if (message && message.length) { %>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -52,28 +120,8 @@
                         <% } %>
                             <%- body -%>
         </section>
-        <script>
-            // Example starter JavaScript for disabling form submissions if there are invalid fields
-            (function () {
-                'use strict'
 
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var forms = document.querySelectorAll('.needs-validation')
 
-                // Loop over them and prevent submission
-                Array.prototype.slice.call(forms)
-                    .forEach(function (form) {
-                        form.addEventListener('submit', function (event) {
-                            if (!form.checkValidity()) {
-                                event.preventDefault()
-                                event.stopPropagation()
-                            }
-
-                            form.classList.add('was-validated')
-                        }, false)
-                    })
-            })()
-        </script>
     </body>
 
 </html>

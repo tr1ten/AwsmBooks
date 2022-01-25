@@ -28,8 +28,8 @@ router.post('/logout', (req, res) => {
 })
 
 router.post('/register', async (req, res,next) => {
-  try {
-    
+  try 
+  {
     console.log('got register req',req.body)
     const { username, email, password } = req.body;
     const newUser = new User({ username: username, email: email })
@@ -39,7 +39,8 @@ router.post('/register', async (req, res,next) => {
     req.flash('info','Succesfully logged in')
     res.redirect('/')
   }
-  catch(e){
+  catch(e)
+  {
     req.flash('error','Something went wrong , please try again!',e.message)
     res.redirect('/register')
   }

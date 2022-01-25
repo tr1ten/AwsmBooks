@@ -13,8 +13,19 @@
       <form action="<%= `shop/${item._id}` %>?_method=DELETE " method="post">
         <button type="submit" class="btn btn-danger">Remove</button>
       </form>
-      <% } %>
       
+      <% } %>
+      <% if (item.haveSub) { %>
+        <form action="<%= `shop/${item._id}/unsubscribe`%> " method="post">
+          <button type="submit" class="btn btn-danger">UnSubscribe</button>
+        </form>
+      <% } %>
+      <% if (item.haveSub===false) { %>
+       
+        <form action="<%= `shop/${item._id}/subscribe`%> " method="post">
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      <% } %>
       <a href="/shop/<%= item._id%> " class="btn btn-primary">View</a>
     </div>
 
